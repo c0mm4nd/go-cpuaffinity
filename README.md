@@ -1,5 +1,7 @@
 # go-cpuaffinity
 
+[![](https://godoc.org/github.com/maoxs2/go-cpuaffinity?status.svg)](http://godoc.org/github.com/maoxs2/go-cpuaffinity)
+
 read godoc for usage
 
-` go run affinity.go | sort -u `
+On windows, **gcc(mingw or cygwin) is required**
