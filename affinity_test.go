@@ -13,13 +13,29 @@ func worker(cpuID int) {
 	}
 }
 
-func TestSetCPUAffinity(t *testing.T) {
+func workerMask(mask uint64) {
+	SetCPUAffinityMask(mask)
 	for {
-		time.Sleep(time.Second)
-
-		go worker(1)
-		go worker(2)
-		go worker(3)
-		select {}
+		sha256.Sum256(nil)
 	}
+}
+
+func TestSetCPUAffinity(t *testing.T) {
+	time.Sleep(time.Second)
+
+	go worker(0)
+	go worker(1)
+	go worker(3)
+
+	select {}
+}
+
+func TestSetCPUAffinityMask(t *testing.T) {
+	time.Sleep(time.Second)
+
+	go workerMask(1<<0 | 1<<1 | 1<<3)
+	go workerMask(1<<0 | 1<<1 | 1<<3)
+	go workerMask(1<<0 | 1<<1 | 1<<3)
+
+	select {}
 }

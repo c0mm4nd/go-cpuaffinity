@@ -10,10 +10,17 @@ import (
 #include <Windows.h>
 
 void lock(int cpuID) {
-    HANDLE process = GetCurrentThread();
-    DWORD_PTR processAffinityMask = 1 << cpuID;
+    HANDLE thread = GetCurrentThread();
+    DWORD_PTR threadAffinityMask = 1 << cpuID;
 
-    SetThreadAffinityMask(process, processAffinityMask);
+    SetThreadAffinityMask(thread, threadAffinityMask);
+}
+
+void lockMask(unsigned long long mask) {
+    HANDLE thread = GetCurrentThread();
+    DWORD_PTR threadAffinityMask = mask;
+
+    SetThreadAffinityMask(thread, threadAffinityMask);
 }
 */
 import "C"
@@ -22,4 +29,9 @@ import "C"
 func SetCPUAffinity(cpuID int) {
 	runtime.LockOSThread()
 	C.lock(C.int(cpuID))
+}
+
+func SetCPUAffinityMask(mask uint64) {
+	runtime.LockOSThread()
+	C.lockMask(C.ulonglong(mask))
 }

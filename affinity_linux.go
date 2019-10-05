@@ -10,13 +10,21 @@ import (
 #include <pthread.h>
 
 void lock(int cpuid) {
-	pthread_t tid;
-	cpu_set_t cpuset;
+    pthread_t tid;
+    cpu_set_t cpuset;
 
-	tid = pthread_self();
-	CPU_ZERO(&cpuset);
-	CPU_SET(cpuid, &cpuset);
-	pthread_setaffinity_np(tid, sizeof(cpu_set_t), &cpuset);
+    tid = pthread_self();
+    CPU_ZERO(&cpuset);
+    CPU_SET(cpuid, &cpuset);
+    pthread_setaffinity_np(tid, sizeof(cpu_set_t), &cpuset);
+}
+
+void lockMask(unsigned long long mask) {
+    pthread_t tid;
+    cpu_set_t cpuset = mask;
+
+    tid = pthread_self();
+    pthread_setaffinity_np(tid, sizeof(cpu_set_t), &cpuset);
 }
 */
 import "C"
@@ -25,4 +33,9 @@ import "C"
 func SetCPUAffinity(cpuID int) {
 	runtime.LockOSThread()
 	C.lock(C.int(cpuID))
+}
+
+func SetCPUAffinityMask(mask uint64) {
+	runtime.LockOSThread()
+	C.lockMask(C.ulonglong(mask))
 }
