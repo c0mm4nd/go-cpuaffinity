@@ -23,9 +23,10 @@ func workerMask(mask uint64) {
 func TestSetCPUAffinity(t *testing.T) {
 	time.Sleep(time.Second)
 
-	go worker(0)
-	go worker(1)
-	go worker(3)
+	cpus := []int{0, 1, 3}
+	for _, cpuid := range cpus {
+		go worker(cpuid)
+	}
 
 	select {}
 }

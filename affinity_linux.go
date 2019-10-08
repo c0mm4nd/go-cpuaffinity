@@ -21,9 +21,22 @@ void lock(int cpuid) {
 
 void lockMask(unsigned long long mask) {
     pthread_t tid;
-    cpu_set_t cpuset = mask;
+    cpu_set_t cpuset;
 
     tid = pthread_self();
+    CPU_ZERO(&cpuset);
+    for (int i = 0; ; ++i)
+    {
+        if ( mask >> i == 0 )
+        {
+            break;
+        }
+        if ( (mask >> i) & (1<<i) )
+        {
+            CPU_SET(i, &cpuset);
+        }
+    }
+
     pthread_setaffinity_np(tid, sizeof(cpu_set_t), &cpuset);
 }
 */

@@ -4,4 +4,4 @@
 
 read godoc for usage
 
-On windows, **gcc(mingw or cygwin) is required**
+On windows, **gcc(mingw, msys2 or cygwin) is required**
